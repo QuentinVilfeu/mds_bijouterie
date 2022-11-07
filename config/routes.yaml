@@ -1,3 +1,8 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+
+# main: 
+#     path: /main
+#     controller: App\Controller\MainController::index
