@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +22,7 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/category/add', name: 'app_admin_category_add')]
-    public function addCategory(): Response
+    public function addCategory(Request $request, EntityManagerInterface $manager, CategoryRepository $categoryRepository): Response
     {
         // Pour ajouter une categorie on a besoin de créer un nouvel objet de la classe/Entity Category
         // créer un nouvel objet => instanciation
@@ -32,7 +35,44 @@ class AdminController extends AbstractController
         // dump($form);
 
         // Traitement des données
-        
+        // handleRequest() permet de gérer le traitement de la saisie des données.
+        // Lorsque l'on soumet le formulaire $_POST est transmis à la même url grâce à la request.
+        // handleRequest() va remplir automatiquement mon objet $category
+        $form->handleRequest($request);
+        // dump($category); // A ce niveau le name est rempli. L'id est toujours vide car l'objet n'est pas envoyé en BDD 
+
+        // On doit vérifier si le formulaire est envoyé et si les conditions indiqués dans l'entité (Assert) sont validée.
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            // dump($category);
+            // // on peut maintenant réellement envoyé en BDD
+            // $manager->persist($category); // Definir l'objet à envoyer
+            // $manager->flush(); // Envoyer l'objet en question
+
+            // Symfony a développé une méthode save qui me permet de faire le persist() et le flush() pour moi.
+            // Cette méthode provient de la classe CategoryRepository. 
+            // On retrouvera dans les repository TOUTES les requêtes vers notre BDD
+            $categoryRepository->save($category, true);
+
+
+            // dd($category); // Ici notre objet est complet. L'id est maintenant renseigné.
+
+            // Maintenant je peux afficher un message de succès et faire la redirection vers la page 'afficher/category'
+
+            /*
+                addFlash() est une méthode qui permet de véhiculer les données entre les pages. 
+                Elle attend 2 paramètres : 
+                        - le nom/id du flash du message
+                        - le message, la valeur.
+             */
+
+            $this->addFlash('success', 'La category a bien été ajoutée');
+            // $this->addFlash('success2', 'message2');
+            // $this->addFlash('success3', 'message3');
+            
+            return $this->redirectToRoute('app_admin_category');
+
+        }
 
         return $this->renderForm('admin/ajouter_category.html.twig', [
             'formCategory' => $form
