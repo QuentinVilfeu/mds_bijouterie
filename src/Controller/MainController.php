@@ -23,8 +23,22 @@ class MainController extends AbstractController
 
     #[Route('/', name:'app_accueil')]
     public function accueil(){
-        return $this->render('main/accueil.html.twig');
+
+        $message = "Bienvenue";
+        // dd($message);
+        // dump($message);die;
+
+        return $this->render('main/accueil.html.twig', [
+            'message' => $message ?? ""
+        ]);
     }
     
 }
+
+
+
+
+
+
+
 
