@@ -8,4 +8,34 @@
         <div class="alert alert-success col-md-6 mx-auto text-center">{{message}}</div>
     {% endfor %}
 
+    <table class="table table-striped table-hover text-center col-md-6">
+
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Nom</td>
+                <td>Modifier</td>
+                <td>Supprimer</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {# Affichage dynamique des données #}
+            {% for category in categories %}
+                {# {{ dump(category) }} #}
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>
+                        <a href="{{ path('app_admin_category_update2', {id:category.id}) }}" class="btn btn-warning">Modifier</a>
+                    </td>
+                    <td>
+                        <a href="" class="btn btn-danger">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
 {% endblock %}

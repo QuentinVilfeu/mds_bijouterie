@@ -14,10 +14,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminController extends AbstractController
 {
     #[Route('/admin/category', name: 'app_admin_category')]
-    public function index(): Response
+    public function index(CategoryRepository $categoryRepository): Response
     {
+        $categories = $categoryRepository->findAll();
+        // dd($categories);
         return $this->render('admin/afficher_category.html.twig', [
-            'controller_name' => 'AdminController',
+            'categories' => $categories
         ]);
     }
 
@@ -75,6 +77,40 @@ class AdminController extends AbstractController
         }
 
         return $this->renderForm('admin/ajouter_category.html.twig', [
+            'formCategory' => $form
+        ]);
+    }
+
+    #[Route('/admin/category/update/{id}', name: 'app_admin_category_update')]
+    public function updateCategory($id, CategoryRepository $categoryRepository)
+    {
+        $category = $categoryRepository->find($id);
+        
+
+
+        return $this->render('admin/update_category.html.twig');
+    }
+
+    #[Route('/admin/category/update2/{id}', name: 'app_admin_category_update2')]
+    public function updateCategory2(Category $category, Request $request, EntityManagerInterface $manager)
+    {   
+        $form = $this->createForm(CategoryType::class, $category);
+
+        $form->handleRequest($request);
+
+        // dump($category);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $manager->persist($category);
+            $manager->flush();
+
+            $this->addFlash('success', "La catégorie N°".$category->getId()." a bien été modifée");
+
+            return $this->redirectToRoute('app_admin_category');
+        }
+
+        return $this->renderForm('admin/update_category.html.twig', [
             'formCategory' => $form
         ]);
     }

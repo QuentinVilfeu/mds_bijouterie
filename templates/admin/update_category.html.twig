@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+
+{% block body %}
+
+    <h1 class="text-center">Modification</h1>
+
+
+    <div class="col-md-4 mx-auto">
+        {# Première méthode pour afficher un formulaire #}
+        {# {{ form(formCategory) }} #}
+
+        {# Deuxième méthode pour différencier les champs #}
+        {{ form_start(formCategory) }} {# Balise ouvrante (<form>) #}
+
+            <div class="col-md-10 mx-auto">
+                {{ form_row(formCategory.name) }} {# form_row permet d'afficher un champ particulier. Elle attend en paramètre le formulaire en question suivi du champ que je souhaite afficher. #}
+            </div>
+
+                {# {{ form_row(formCategory.Ajouter) }} #}
+            {# <div class="">
+            </div> #}
+
+            <button class="d-block mx-auto btn btn-warning">Modifier</button>
+        {{ form_end(formCategory) }} {# Balise fermante ((</form>)) #}
+        
+    </div>
+
+
+{% endblock %}
