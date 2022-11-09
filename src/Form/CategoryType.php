@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -23,7 +24,15 @@ class CategoryType extends AbstractType
                 'required' => false
             ])
 
-            // ->add('')
+            // ->add('titre', TextareaType::class, [
+            //     'mapped' => false
+            // ])
+
+            ->add("Ajouter", SubmitType::class, [
+                'attr' => [
+                    'class' => 'd-block mx-auto btn-primary'// on rajoute des classes pour centrer notre bouton
+                ]
+            ])
         ;
     }
 

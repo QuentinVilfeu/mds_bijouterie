@@ -25,12 +25,14 @@ class AdminController extends AbstractController
         // créer un nouvel objet => instanciation
         $category = new Category();
 
-        // dd($category); // POur le moment mon objet est vide
+        // dump($category); // Pour le moment mon objet est vide
 
         // Création du formulaire 
         $form = $this->createForm(CategoryType::class, $category);
+        // dump($form);
 
-        // traitement des données
+        // Traitement des données
+        
 
         return $this->renderForm('admin/ajouter_category.html.twig', [
             'formCategory' => $form
